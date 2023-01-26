@@ -1,0 +1,57 @@
+@page "/Kennels/{KennelId:guid}/Dogs/Create"
+@using LS.Kennel.Cloud.Models.Requests
+@using LS.Kennel.Cloud.Models
+@using LS.Kennel.Cloud.Services
+@using LS.Kennel.Cloud.Helpers
+@inject IKennelService KennelService
+@inject IDogService DogService
+@inject NavigationManager NavigationManager
+
+@if (_kennel is null)
+{
+    <Loading/>
+    return;
+}
+
+<h3>Neuer Hund - @_kennel.Name</h3>
+
+<EditForm Model="_createDogRequest" OnValidSubmit="CreateDogAsync">
+    <DataAnnotationsValidator/>
+    <div class="mb-3">
+        <label for="dogNameInput" class="form-label">Name</label>
+        <InputText class="form-control" id="dogNameInput" placeholder="Name" @bind-Value="_createDogRequest.Name"/>
+    </div>
+    <div class="mb-3">
+        <label for="dogCallNameInput" class="form-label">Rufname</label>
+        <InputText class="form-control" id="dogCallNameInput" placeholder="Rufname" @bind-Value="_createDogRequest.CallName"/>
+    </div>
+    <div class="mb-3">
+        <label for="dogBirthdayInput" class="form-label">Geburtsdatum</label>
+        <InputDate Type="InputDateType.DateTimeLocal" class="form-control" id="dogBirthdayInput" @bind-Value="_createDogRequest.BirthDay" max="@DateTime.Now"/>
+    </div>
+
+    <button class="btn btn-success" type="submit">Spreichern</button>
+</EditForm>
+
+@code {
+    CreateDogRequest _createDogRequest = new();
+    [Parameter]
+    public Guid KennelId { get; set; }
+    Kennel? _kennel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _kennel = await KennelService.GetByIdAsync(KennelId);
+        
+        if(_kennel is null)
+            NavigationManager.NavigateTo("/Kennels");
+        await base.OnInitializedAsync();
+    }
+    private async Task CreateDogAsync()
+    {
+        var newDogId = await DogService.CreateAsync(_createDogRequest, GetKennelIdSafe());
+        NavigationManager.NavigateTo($"/Kennels/{GetKennelIdSafe()}/Dogs/{newDogId}");
+    }
+    
+    private Guid GetKennelIdSafe() => (_kennel?.Id).AssertNotNull()!.Value;
+}

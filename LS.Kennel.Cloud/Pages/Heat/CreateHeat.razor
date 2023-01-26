@@ -1,0 +1,34 @@
+@page "/Kennels/{KennelId:guid}/Dogs/{DogId:guid}/Heats/Create"
+@using LS.Kennel.Cloud.Models.Requests
+@using LS.Kennel.Cloud.Services
+@inject IDogService DogService
+@inject NavigationManager NavigationManager
+
+<EditForm Model="_createHeatRequest" OnValidSubmit="CreateHeatAsync">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    <div class="form-group">
+        <label for="start">Datum</label>
+        <div class="input-group">
+            <InputDate class="form-control" @bind-Value="_createHeatRequest.Start" id="start"/>
+            <button type="button" @onclick="() => _createHeatRequest.Start = DateTime.Now" class="btn btn-outline-primary">Jetzt</button>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">Speichern</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Guid KennelId { get; set; }
+    [Parameter]
+    public Guid DogId { get; set; }
+
+    readonly CreateHeatRequest _createHeatRequest = new();
+
+    private async Task CreateHeatAsync()
+    {
+        _createHeatRequest.DogId = DogId;
+        var heatId = await DogService.AddHeatAsync(_createHeatRequest);
+        NavigationManager.NavigateTo($"/Kennels/{KennelId}/Dogs/{DogId}/Heats/{heatId}");
+    }
+}

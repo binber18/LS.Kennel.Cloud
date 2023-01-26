@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LS.Kennel.Cloud", "LS.Kennel.Cloud\LS.Kennel.Cloud.csproj", "{C3607ABD-96B2-4219-98D5-749A59A7FBE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LS.Kennel.Cloud.Services", "LS.Kennel.Cloud.Services\LS.Kennel.Cloud.Services.csproj", "{6DBE2008-250B-42B1-B305-3008489FFEC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LS.Kennel.Cloud.Models", "LS.Kennel.Cloud.Models\LS.Kennel.Cloud.Models.csproj", "{B9F4CBDD-DB72-4292-867B-2C834D384691}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LS.Kennel.Cloud.Repositories", "LS.Kennel.Cloud.Repositories\LS.Kennel.Cloud.Repositories.csproj", "{8F94E586-3DB5-4A10-8CDC-1F2767EC64B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LS.Kennel.Cloud.Repositories.EF", "LS.Kennel.Cloud.Repositories.EF\LS.Kennel.Cloud.Repositories.EF.csproj", "{8A467CB5-36A3-4D99-A443-7BAC90426DAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LS.Kennel.Cloud.Helpers", "LS.Kennel.Cloud.Helpers\LS.Kennel.Cloud.Helpers.csproj", "{DBDF64FA-A2F7-4405-9BF6-EF916CD0A42A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3607ABD-96B2-4219-98D5-749A59A7FBE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3607ABD-96B2-4219-98D5-749A59A7FBE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3607ABD-96B2-4219-98D5-749A59A7FBE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3607ABD-96B2-4219-98D5-749A59A7FBE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DBE2008-250B-42B1-B305-3008489FFEC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DBE2008-250B-42B1-B305-3008489FFEC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DBE2008-250B-42B1-B305-3008489FFEC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DBE2008-250B-42B1-B305-3008489FFEC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9F4CBDD-DB72-4292-867B-2C834D384691}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9F4CBDD-DB72-4292-867B-2C834D384691}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9F4CBDD-DB72-4292-867B-2C834D384691}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9F4CBDD-DB72-4292-867B-2C834D384691}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F94E586-3DB5-4A10-8CDC-1F2767EC64B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F94E586-3DB5-4A10-8CDC-1F2767EC64B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F94E586-3DB5-4A10-8CDC-1F2767EC64B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F94E586-3DB5-4A10-8CDC-1F2767EC64B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A467CB5-36A3-4D99-A443-7BAC90426DAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A467CB5-36A3-4D99-A443-7BAC90426DAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A467CB5-36A3-4D99-A443-7BAC90426DAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A467CB5-36A3-4D99-A443-7BAC90426DAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBDF64FA-A2F7-4405-9BF6-EF916CD0A42A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBDF64FA-A2F7-4405-9BF6-EF916CD0A42A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBDF64FA-A2F7-4405-9BF6-EF916CD0A42A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBDF64FA-A2F7-4405-9BF6-EF916CD0A42A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

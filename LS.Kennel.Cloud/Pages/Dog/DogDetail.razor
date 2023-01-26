@@ -1,0 +1,70 @@
+@page "/Kennels/{KennelId:guid}/Dogs/{DogId:guid}"
+@using LS.Kennel.Cloud.Models
+@using LS.Kennel.Cloud.Services
+@inject IDogService DogService
+
+@if (_dog is null)
+{
+    <Loading/>
+    return;
+}
+@if (string.IsNullOrWhiteSpace(_dog.CallName) || string.Equals(_dog.CallName, _dog.Name))
+{
+    <h2>@_dog.Name</h2>
+}
+else
+{
+    <h2>@_dog.Name - @_dog.CallName</h2>
+}
+<div>
+    <label for="birthDay">Geburtstag</label>
+    <input readonly value="@_dog.BirthDay" class="form-control" id="birthDay"/>
+</div>
+
+<div class="table-responsive mt-4">
+    <h4>Läufigkeiten</h4>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Start</th>
+            <th>Ende</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var heat in _dog.Heats)
+        {
+            <tr>
+                <td>@heat.Start</td>
+                <td>@heat.End</td>
+                <td>
+                    <a href="/Kennels/@KennelId/Dogs/@DogId/Heats/@heat.Id" class="btn btn-outline-primary">
+                        <span class="oi oi-arrow-right"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td></td>
+            <td><a href="/Kennels/@KennelId/Dogs/@DogId/Heats/Create" class="btn btn-success"><span class="oi oi-plus"></span></a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public Guid KennelId { get; set; }
+    [Parameter]
+    public Guid DogId { get; set; }
+
+    Dog? _dog;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _dog = await DogService.GetByIdAsync(DogId);
+        await base.OnInitializedAsync();
+    }
+
+}

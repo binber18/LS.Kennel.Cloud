@@ -1,0 +1,58 @@
+﻿@using LS.Kennel.Cloud.Services
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using LS.Kennel.Cloud.Helpers
+@using Microsoft.IdentityModel.Tokens
+@inject IKennelService KennelService
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Kennel Cloud</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        @if (!_kennels.IsNullOrEmpty())
+        {
+            foreach (var kennel in _kennels!)
+            {
+                var link = $"/Kennels/{kennel.Id}";
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="@link">
+                        @kennel.Name
+                    </NavLink>
+                </div>
+            }
+        }
+    </nav>
+</div>
+
+@code {
+    private bool _collapseNavMenu = true;
+
+    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        _collapseNavMenu = !_collapseNavMenu;
+    }
+
+    private IEnumerable<Models.Kennel>? _kennels;
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthStateTask { get; set; } = default!;
+    ClaimsPrincipal? _user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _user ??= (await AuthStateTask).User;
+        if (_user is null)
+            return;
+        _kennels = await KennelService.GetForUserAsync(_user.GetUserId().AssertNotNull());
+        await base.OnInitializedAsync();
+    }
+
+}

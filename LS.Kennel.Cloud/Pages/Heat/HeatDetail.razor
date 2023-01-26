@@ -1,0 +1,105 @@
+@page "/Kennels/{KennelId:guid}/Dogs/{DogId:guid}/Heats/{HeatId:guid}"
+@using LS.Kennel.Cloud.Services
+@using LS.Kennel.Cloud.Models
+@using LS.Kennel.Cloud.Models.Requests
+@using Microsoft.AspNetCore.Components
+@inject IHeatService HeatService
+@inject NavigationManager NavigationManager
+@if (_heat is null)
+{
+    <Loading/>
+    return;
+}
+
+<Title>
+    @_heat.Dog?.Name
+    Läufigkeit
+</Title>
+
+<h4>
+    @_heat.Start.ToShortDateString() -
+    @if (_heat.End.HasValue)
+    {
+        <text>@_heat.End.Value.ToShortDateString()</text>
+    }
+    else
+    {
+        <text>offen</text>
+    }
+</h4>
+<div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Test</th>
+                <th>Wert (ng/ml)</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var test in _heat.ProgesteroneTests)
+            {
+                <tr>
+                    <td>@test.TestTime</td>
+                    <td>@test.Value</td>
+                    <td>
+                        <button class="btn btn-danger"
+                                @onclick="async () => await DeleteProgesteroneTestAsync(test.Id)">
+                            <span class="oi oi-x"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-4 border p-4">
+        <h4>Neuer Progesteron Test</h4>
+        <EditForm Model="_newTest" OnValidSubmit="AddProgesteroneTestAsync">
+            <div class="mb-3">
+                <label for="testTime" class="form-label">Test Zeitpunkt</label>
+                <div class="input-group">
+                    <InputDate Type="InputDateType.DateTimeLocal" class="form-control" id="testTime" placeholder="Test Zeitpunkt" @bind-Value="_newTest.TestTime"/>
+                    <button type="button" @onclick="() => _newTest.TestTime = DateTime.Now" class="btn btn-outline-primary">Jetzt</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="testValue" class="form-label">Wert (ng/ml)</label>
+                <InputNumber class="form-control" id="testValue" placeholder="Wert (ng/ml)" @bind-Value="_newTest.Value" step="0.01"/>
+            </div>
+            <button type="submit" class="btn btn-success">Speichern</button>
+        </EditForm>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public Guid KennelId { get; set; }
+    [Parameter]
+    public Guid DogId { get; set; }
+    [Parameter]
+    public Guid HeatId { get; set; }
+
+    Heat? _heat;
+
+    CreateProgesteroneTestRequest _newTest = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _heat = await HeatService.GetByIdAsync(HeatId);
+        if (_heat is null)
+            NavigationManager.NavigateTo($"/Kennels/{KennelId}/Dogs/{DogId}");
+        await base.OnInitializedAsync();
+    }
+    private async Task AddProgesteroneTestAsync()
+    {
+        if (await HeatService.AddProgesteroneTestAsync(HeatId, _newTest))
+            _newTest = new CreateProgesteroneTestRequest();
+    }
+    private async Task DeleteProgesteroneTestAsync(Guid id)
+    {
+        await HeatService.DeleteProgesteroneTestAsync(HeatId, id);
+    }
+}

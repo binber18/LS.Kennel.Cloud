@@ -1,0 +1,32 @@
+@page "/Kennels/Create"
+@using LS.Kennel.Cloud.Models.Requests
+@using LS.Kennel.Cloud.Services
+@using System.Security.Claims
+@using LS.Kennel.Cloud.Helpers
+@inject IKennelService KennelService
+@inject NavigationManager NavigationManager
+
+<EditForm Model="_createKennelRequest" OnValidSubmit="CreateKennelAsync">
+    <DataAnnotationsValidator/>
+    <div class="mb-3">
+        <label for="kennelNameInput" class="form-label">Kennel Name</label>
+        <InputText class="form-control" id="kennelNameInput" placeholder="von ..." @bind-Value="_createKennelRequest.Name"/>
+    </div>
+
+    <button class="btn btn-success" type="submit">Spreichern</button>
+</EditForm>
+
+@code {
+    readonly CreateKennelRequest _createKennelRequest = new();
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthStateTask { get; set; } = default!;
+    ClaimsPrincipal? _user;
+
+    private async Task CreateKennelAsync()
+    {
+        _user ??= (await AuthStateTask).User;
+        var kennelId = await KennelService.CreateAsync(_createKennelRequest, _user.GetUserId().AssertNotNull());
+        NavigationManager.NavigateTo($"/Kennels/{kennelId}");
+    }
+}

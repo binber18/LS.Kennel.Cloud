@@ -1,0 +1,55 @@
+@page "/Kennels/{KennelId:guid}"
+@using LS.Kennel.Cloud.Services
+@using LS.Kennel.Cloud.Models
+@inject IKennelService KennelService
+
+@if (_kennel is null)
+{
+    <Loading/>
+    return;
+}
+
+<Title>@_kennel.Name</Title>
+<div class="table-responsive mt-4">
+    <h4>Hunde</h4>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Rufname</th>
+            <th>Geburtsdatum</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var dog in _kennel.Dogs)
+        {
+            <tr>
+                <td>@dog.Name</td>
+                <td>@dog.CallName</td>
+                <td>@dog.BirthDay.ToShortDateString()</td>
+                <td><a href="/Kennels/@KennelId/Dogs/@dog.Id" class="btn btn-outline-primary"><span class="oi oi-arrow-right"></span></a></td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a href="/Kennels/@_kennel.Id/Dogs/Create" class="btn btn-success"><span class="oi oi-plus"></span></a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public Guid KennelId { get; set; }
+
+    Kennel? _kennel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _kennel = await KennelService.GetByIdAsync(KennelId);
+        await base.OnInitializedAsync();
+    }
+}

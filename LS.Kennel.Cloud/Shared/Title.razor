@@ -1,0 +1,14 @@
+@if (ChildContent is not null)
+{
+    <PageTitle>@ChildContent - Kennel Cloud</PageTitle>
+    <h2>@ChildContent</h2>
+}
+else
+{
+    <PageTitle>Kennel Cloud</PageTitle>
+}
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

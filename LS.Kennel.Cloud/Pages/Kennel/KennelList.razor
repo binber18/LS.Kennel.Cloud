@@ -1,0 +1,68 @@
+@page "/"
+@page "/Kennels"
+@using LS.Kennel.Cloud.Models
+@using LS.Kennel.Cloud.Services
+@using System.Security.Claims
+@using LS.Kennel.Cloud.Helpers
+@attribute [Authorize]
+@inject IKennelService KennelService
+@inject NavigationManager NavigationManager
+
+<Title>Kennels</Title>
+
+@if (_kennels is null)
+{
+    <Loading/>
+    return;
+}
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var kennel in _kennels)
+        {
+            <tr>
+                <td>@kennel.Name</td>
+                <td>
+                    <a href="/Kennels/@kennel.Id" class="btn btn-outline-primary">
+                        <span class="oi oi-arrow-right"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td>
+                <a href="/Kennels/Create" class="btn btn-success">
+                    <span class="oi oi-plus"></span>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private List<Kennel>? _kennels;
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthStateTask { get; set; } = default!;
+    ClaimsPrincipal? _user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateTask;
+        _user = authState.User;
+        var returnedKennels = await KennelService.GetForUserAsync(_user.GetUserId().AssertNotNull());
+        _kennels = returnedKennels.ToList();
+        if (_kennels.Count == 1)
+            NavigationManager.NavigateTo($"/Kennels/{_kennels[0].Id}");
+        await base.OnInitializedAsync();
+    }
+}
